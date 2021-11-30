@@ -1,0 +1,56 @@
+
+<div class="dragContainer" [ngStyle]="{'width':proWidth?.length>0 ?proWidth:''}">
+  <div class="dragSection first">
+    <div class="draginput-wrap linecon-search--before" *ngIf="ProSearch">
+      <input type="text" class="dragsearch" (keyup)="dragSearch($event, 'inactive')" [(ngModel)]="searchInactiveText" [placeholder]="ProPlaceholder"> 
+      <button type="button" class="clearSearch linecon-close--before ico-s-14px" *ngIf="searchInactiveText?.length > 0" (click)="searchInactiveText = ''"></button>
+    </div>
+<div #proinactiveList="cdkDropList"
+  class="box-list"
+  cdkDropList
+  cdkDropListOrientation="vertical"
+  [cdkDropListData]="inactiveList"
+  [cdkDropListConnectedTo]="[proactiveList]"
+
+  (cdkDropListDropped)="drop($event)">
+  <perfect-scrollbar class="prodragscrollbar" (psYReachEnd)="onScrollEvent($event)"  (psYReachStart)="onScrollEvent($event)">
+   <ng-container >
+  <div class="drag-box draglist-box {{proListClass}}" 
+  cdkDragBoundary="body" *ngFor="let list of inactiveList | filter: searchInactiveText;let i=index;" cdkDrag [cdkDragDisabled]="!dragger"
+  (click)="dragClickList($event, list, i, 'inactive')"
+  >
+    {{list}}</div></ng-container>
+    </perfect-scrollbar>
+</div>
+<button type="button" class="btn-we linecon-check--before m-0px dragger-button  {{ProSelectAllClass}}" 
+*ngIf="ProSelectAll" (click)="dragallcheckList('inactive')"
+[disabled]="inactiveList?.length == 0"
+>{{ProSelectAllText}}</button>
+</div>
+<div class="dragSection last">
+  <div class="draginput-wrap linecon-search--before" *ngIf="ProSearch">
+    <input type="text" class="dragsearch" (keyup)="dragSearch($event, 'active')"  [(ngModel)]="searchActiveText"  [placeholder]="ProPlaceholder">
+  <button type="button" class="clearSearch linecon-close--before ico-s-14px" *ngIf="searchActiveText?.length > 0" (click)="searchActiveText = ''"></button>
+  </div>
+<div #proactiveList="cdkDropList"
+  class="box-list"
+  cdkDropList
+  cdkDropListOrientation="vertical"
+  [cdkDropListData]="activeList"
+  [cdkDropListConnectedTo]="[proinactiveList]"
+  (cdkDropListDropped)="drop($event)">
+  <perfect-scrollbar class="prodragscrollbar" minScrollbarLength="40px" (psYReachEnd)="onScrollEvent($event)"  (psYReachStart)="onScrollEvent($event)">
+  <ng-container>
+    <div class="drag-box draglist-box {{proListClass}}" cdkDragBoundary="body" *ngFor="let list of activeList | filter: searchActiveText;let i=index;"  cdkDrag [cdkDragDisabled]="!dragger"
+    (click)="dragClickList($event, list,i, 'active')"
+    >
+      {{list}}</div></ng-container>
+      </perfect-scrollbar>
+</div>
+<button type="button" class="btn-we linecon-close--before m-0px dragger-button {{ProDeSelectAllClass}}" *ngIf="ProSelectAll" (click)="dragallcheckList('active')"
+[disabled]="activeList?.length == 0"
+>{{ProDeSelectAllText}}</button>
+</div>
+</div>
+<!-- {{'InActive:'+inactiveList?.length}}
+{{'Active:'+activeList?.length}} -->
